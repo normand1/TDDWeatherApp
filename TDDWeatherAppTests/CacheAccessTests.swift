@@ -1,24 +1,20 @@
 //
-//  TDDWeatherAppTests.swift
-//  TDDWeatherAppTests
+//  CacheAccessTests.swift
+//  TDDWeatherApp
 //
 //  Created by David Norman on 6/25/15.
 //  Copyright (c) 2015 David Norman. All rights reserved.
 //
 
-import UIKit
 import XCTest
 import Nimble
 
-class TDDWeatherAppTests: XCTestCase {
+class CacheAccessTests: XCTestCase {
     
     var topDict : NSDictionary!
-    
+
     override func setUp() {
         super.setUp()
-        
-        //let weatherDictResult = weatherAPIHandler.fetchWeatherForZip("94538")
-        
         let bundle = NSBundle.mainBundle()
         let path = bundle.pathForResource("openWeatherApp94538Result", ofType: "txt")
         let text = String(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: nil)!
@@ -32,7 +28,7 @@ class TDDWeatherAppTests: XCTestCase {
         if let tempDict = jsonObject as? NSDictionary {
             self.topDict = tempDict
             println(self.topDict)
-
+            
         }
     }
     
@@ -41,28 +37,31 @@ class TDDWeatherAppTests: XCTestCase {
         super.tearDown()
     }
     
-    func testOpenWeatherAPIHandlerReturnsAJSONDictObject() {
-            expect(self.topDict).toNot(beNil())
-    }
+    //MARK: cacheJsonDict(zip: String, dictionary : NSDictionary)->Bool
     
-    func testWeatherAPIHandlerReturnsCurrentTemp() {
-        let temp = OpenWeatherAPIHandler.temperatureFromDictionary(self.topDict)
-        expect(temp).to(equal(298.12))
-    }
-    
-    func testWeatherAPIHandlerReturnsWeatherDescription() {
-        let weatherDescription = OpenWeatherAPIHandler.weatherDescriptionFromDictionary(self.topDict)
-        expect(weatherDescription).to(equal("01d"))
-    }
-    
-    func testIsValidZip() {
-        let result = ViewControllerUtility.checkIfIsZip("94538")
+    func testCacheANewObject() {
+        let result = CacheAccess.cacheJsonDict("94538", dictionary: self.topDict)
         expect(result).to(beTrue())
     }
-    func testIsInvalidZip() {
-        let result = ViewControllerUtility.checkIfIsZip("")
-        expect(result).to(beFalse())
+    
+    //MARK: tempFromCache(zip : String)->Double?
+    
+    func testRetreiveTempFromCache() {
+        let temp = CacheAccess.tempFromCache("94538")
+        expect(temp).to(beCloseTo(298.12, within: 0.1))
     }
 
+    func testRetreiveNilFromCache() {
+        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "00000")
+        let temp = CacheAccess.tempFromCache("00000")
+        expect(temp).to(beNil())
+    }
     
+    //MARK: weatherDescriptionFromCache(zip: String)->String?
+    
+    func testRetreiveWeatherDescriptionFromCache() {
+        let temp = CacheAccess.weatherDescriptionFromCache("94538")
+        expect(temp) == "01d"
+    }
+
 }

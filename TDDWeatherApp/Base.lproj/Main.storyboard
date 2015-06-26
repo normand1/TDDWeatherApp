@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TDDWeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,8 +16,83 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Zip Code (Example: 94538)" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="iaf-fw-Rj2">
+                                <rect key="frame" x="202" y="285" width="196" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="196" id="ZuE-fz-Sj5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DHj-Q2-aDs">
+                                <rect key="frame" x="208" y="318" width="185" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="185" id="iGk-8U-GzH"/>
+                                </constraints>
+                                <state key="normal" title="Find Weather For Zip Code">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="FindWeatherTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rQr-LP-XGA"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0℉" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xK2-Fj-k5z">
+                                <rect key="frame" x="16" y="131" width="568" height="146"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="146" id="GML-wu-0S6"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="50"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n5Y-dt-mGH">
+                                <rect key="frame" x="209" y="356" width="183" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="183" id="sw6-29-mrn"/>
+                                </constraints>
+                                <state key="normal" title="Change Measurement Unit">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="tapChangeMeasurementUnit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="X34-0z-ciZ"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bWv-GN-C5K">
+                                <rect key="frame" x="16" y="520" width="568" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="BYz-i1-fTq"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                                <color key="shadowColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerY" secondItem="n5Y-dt-mGH" secondAttribute="centerY" constant="-71" id="0OM-pb-inm"/>
+                            <constraint firstAttribute="centerX" secondItem="DHj-Q2-aDs" secondAttribute="centerX" id="9Vn-1n-YKh"/>
+                            <constraint firstAttribute="centerX" secondItem="iaf-fw-Rj2" secondAttribute="centerX" id="BY7-aQ-bGe"/>
+                            <constraint firstItem="xK2-Fj-k5z" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Bd2-UB-pYf"/>
+                            <constraint firstAttribute="centerY" secondItem="xK2-Fj-k5z" secondAttribute="centerY" constant="96" id="GVx-7A-Tgc"/>
+                            <constraint firstItem="bWv-GN-C5K" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="VSW-c4-lvu"/>
+                            <constraint firstAttribute="centerX" secondItem="xK2-Fj-k5z" secondAttribute="centerX" id="XLa-Uh-bir"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="bWv-GN-C5K" secondAttribute="bottom" constant="20" id="b5a-A4-YXA"/>
+                            <constraint firstItem="bWv-GN-C5K" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="be7-Wi-kxP"/>
+                            <constraint firstAttribute="centerY" secondItem="iaf-fw-Rj2" secondAttribute="centerY" id="nKL-cy-UJw"/>
+                            <constraint firstAttribute="centerX" secondItem="n5Y-dt-mGH" secondAttribute="centerX" id="op8-5A-Pgl"/>
+                            <constraint firstAttribute="centerY" secondItem="DHj-Q2-aDs" secondAttribute="centerY" constant="-33" id="q8b-0c-snh"/>
+                            <constraint firstItem="xK2-Fj-k5z" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="sM6-qf-r13"/>
+                            <constraint firstAttribute="centerX" secondItem="bWv-GN-C5K" secondAttribute="centerX" id="xIn-vY-MPw"/>
+                            <constraint firstAttribute="centerY" secondItem="bWv-GN-C5K" secondAttribute="centerY" priority="750" constant="-269.5" id="zdm-YU-jWH"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="suggestionLabel" destination="bWv-GN-C5K" id="rqj-MW-Nlr"/>
+                        <outlet property="tempLabel" destination="xK2-Fj-k5z" id="yLz-ks-0lF"/>
+                        <outlet property="zipTextField" destination="iaf-fw-Rj2" id="C2Y-Fj-C73"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
