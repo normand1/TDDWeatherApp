@@ -7,7 +7,7 @@ If you have recommendations for how to improve the app I'd be happy to accept pu
 
 ## Installation
 Nimble is the only dependency for this project.
-Simply run 'pod intall' to setup the project and download dependencies.
+Simply run 'pod install' to setup the project and download dependencies.
 
 ## License
 The MIT License (MIT)
