@@ -10,50 +10,54 @@ import Foundation
 
 class RequestController  {
     
-    func sendRequest(zipCode : String, callback : (success : Bool, statusCode : Int, errorDescription : String, data : NSData?)->Void) {
-        let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+    func sendRequest(_ zipCode : String, callback : @escaping (_ success : Bool, _ statusCode : Int, _ errorDescription : String, _ data : Data?)->Void) {
+        let sessionConfig = URLSessionConfiguration.default
         
-        let session = NSURLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
-        var URL = NSURL(string: "http://api.openweathermap.org/data/2.5/weather")
+        let session = URLSession(configuration: sessionConfig, delegate: nil, delegateQueue: nil)
+        var URL = Foundation.URL(string: "http://api.openweathermap.org/data/2.5/weather")
         let URLParams = [
             "zip": "\(zipCode),us",
+            "APPID": "5c2f9d0cce66558829a9ac6aad9ec2df"
         ]
         URL = self.NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
-        println("url being called: \(URL!)")
-        let request = NSMutableURLRequest(URL: URL!)
-        request.HTTPMethod = "GET"
+        print("url being called: \(URL!)")
+        let request = NSMutableURLRequest(url: URL!)
+        request.httpMethod = "GET"
         
         /* Start a new Task */
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void in
+        
+        guard let requestURL = request.url else { return }
+        
+        let task = session.dataTask(with: requestURL) { (data, response, error) in
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
-                println("URL Session Task Succeeded: HTTP \(statusCode)")
-                callback(success: true, statusCode: statusCode, errorDescription: "", data: data)
-            }
-            else {
+                let statusCode = (response as! HTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                callback(true, statusCode, "", data)
+            } else {
                 // Failure
-                println("URL Session Task Failed: %@", error.localizedDescription);
-                callback(success: false, statusCode: 0, errorDescription: error.localizedDescription, data: nil)
+                print("URL Session Task Failed: %@", error?.localizedDescription ?? "no error message");
+                callback(false, 0, error!.localizedDescription, data)
             }
-        })
+        }
+        
         task.resume()
     }
     
-    func stringFromQueryParameters(queryParameters : Dictionary<String, String>) -> String {
+    func stringFromQueryParameters(_ queryParameters : Dictionary<String, String>) -> String {
         var parts: [String] = []
         for (name, value) in queryParameters {
             var part = NSString(format: "%@=%@",
-                name.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!,
-                value.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)
+                name.addingPercentEscapes(using: String.Encoding.utf8)!,
+                value.addingPercentEscapes(using: String.Encoding.utf8)!)
             parts.append(part as String)
         }
-        return "&".join(parts)
+        return parts.joined(separator: "&")
     }
     
-    func NSURLByAppendingQueryParameters(URL : NSURL!, queryParameters : Dictionary<String, String>) -> NSURL {
-        let URLString : NSString = NSString(format: "%@?%@", URL.absoluteString!, self.stringFromQueryParameters(queryParameters))
-        return NSURL(string: URLString as String)!
+    func NSURLByAppendingQueryParameters(_ URL : Foundation.URL!, queryParameters : Dictionary<String, String>) -> Foundation.URL {
+        let URLString : NSString = NSString(format: "%@?%@", URL.absoluteString, self.stringFromQueryParameters(queryParameters))
+        return Foundation.URL(string: URLString as String)!
     }
 }
 

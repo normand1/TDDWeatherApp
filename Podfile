@@ -9,7 +9,7 @@ end
 target 'TDDWeatherAppTests' do
 use_frameworks!
 
-    pod 'Nimble', '~> 0.4.0'
+    pod 'Nimble'
 
 end
 

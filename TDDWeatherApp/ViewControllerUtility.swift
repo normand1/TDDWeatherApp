@@ -9,16 +9,16 @@
 import Foundation
 
 extension Double {
-    func format(f: String) -> String {
-        return NSString(format: "%\(f)f", self) as String
+    func format(_ f: String) -> String {
+        return NSString(format: "%\(f)f" as NSString, self) as String
     }
 }
 
 class ViewControllerUtility {
     
-   class func checkIfIsZip(zip : String)->Bool {
+   class func checkIfIsZip(_ zip : String)->Bool {
 
-    if count(zip) < 6 && count(zip) > 0  {
+    if zip.characters.count < 6 && zip.characters.count > 0  {
         return true
         }
     
@@ -26,34 +26,34 @@ class ViewControllerUtility {
     
     }
     
-    class func symbolForMeasurementUnit(measurementUnit : MeasurementUnit)->String? {
+    class func symbolForMeasurementUnit(_ measurementUnit : MeasurementUnit)->String? {
         switch measurementUnit {
-        case MeasurementUnit.Celsius:
+        case MeasurementUnit.celsius:
             return "℃"
-        case MeasurementUnit.Fahrenheit:
+        case MeasurementUnit.fahrenheit:
             return "℉"
-        case MeasurementUnit.Kelvin:
+        case MeasurementUnit.kelvin:
             return "K"
         }
     }
     
-    class func weatherDescriptionAndTempConsiderationsCombined(temp : Double, apiWeatherDescription: String)->String {
+    class func weatherDescriptionAndTempConsiderationsCombined(_ temp : Double, apiWeatherDescription: String)->String {
         var combinedMessageString = weatherDescription(apiWeatherDescription)
         addInTempSpecificMessage(&combinedMessageString, temp: temp)
         return combinedMessageString
     }
     
-    class func addInTempSpecificMessage(inout message : String ,temp : Double) {
+    class func addInTempSpecificMessage(_ message : inout String ,temp : Double) {
         if temp < 278.15 {
-            message = message.stringByReplacingOccurrencesOfString("<tempMessage>", withString: "Don't forget to wear a jacket!", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            message = message.replacingOccurrences(of: "<tempMessage>", with: "Don't forget to wear a jacket!", options: NSString.CompareOptions.literal, range: nil)
         } else {
-            message = message.stringByReplacingOccurrencesOfString("<tempMessage>", withString: " ", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            message = message.replacingOccurrences(of: "<tempMessage>", with: " ", options: NSString.CompareOptions.literal, range: nil)
         }
     }
     
     
     
-    class func weatherDescription(apiWeatherDescription: String)->String {
+    class func weatherDescription(_ apiWeatherDescription: String)->String {
         switch apiWeatherDescription {
         case "01d":
             return "☀️ It's sunny outside, don't forget your suntan lotion! <tempMessage>☀️"

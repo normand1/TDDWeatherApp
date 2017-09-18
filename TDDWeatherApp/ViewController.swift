@@ -9,9 +9,9 @@
 import UIKit
 
 enum MeasurementUnit : Int {
-    case Celsius
-    case Fahrenheit
-    case Kelvin
+    case celsius
+    case fahrenheit
+    case kelvin
 }
 
 class ViewController: UIViewController {
@@ -22,12 +22,12 @@ class ViewController: UIViewController {
     
     
     var currentMeasurementUnit : MeasurementUnit
-    var fifteenMinTimer : NSTimer
+    var fifteenMinTimer : Timer
     var shouldUpdate : Bool
     
-    required init(coder aDecoder: NSCoder) {
-        currentMeasurementUnit = MeasurementUnit.Fahrenheit
-        fifteenMinTimer = NSTimer()
+    required init?(coder aDecoder: NSCoder) {
+        currentMeasurementUnit = MeasurementUnit.fahrenheit
+        fifteenMinTimer = Timer()
         shouldUpdate = true
         super.init(coder: aDecoder)
     }
@@ -36,18 +36,18 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let fifteenMinsInSecs = (60 * 15) as NSTimeInterval
-        self.fifteenMinTimer = NSTimer(timeInterval: fifteenMinsInSecs, target: self, selector: Selector("setShouldUpdateToTrue"), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(self.fifteenMinTimer, forMode: NSRunLoopCommonModes)
+        let fifteenMinsInSecs = (60 * 15) as TimeInterval
+        self.fifteenMinTimer = Timer(timeInterval: fifteenMinsInSecs, target: self, selector: #selector(ViewController.setShouldUpdateToTrue), userInfo: nil, repeats: true)
+        RunLoop.current.add(self.fifteenMinTimer, forMode: RunLoopMode.commonModes)
         self.customizeUI()
     }
     
     func customizeUI() {
-        self.zipTextField.backgroundColor = UIColor.clearColor()
+        self.zipTextField.backgroundColor = UIColor.clear
     }
     
-    override func viewDidAppear(animated: Bool) {
-        UIView.animateWithDuration(2, animations: { () -> Void in
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 2, animations: { () -> Void in
             self.view.backgroundColor = UIColor(red: 0.863, green: 0.925, blue: 0.992, alpha: 1.00)
         })
     }
@@ -72,8 +72,8 @@ class ViewController: UIViewController {
     }
     
     func updateWeatherFromCache() {
-        if let tempResult = CacheAccess.tempFromCache(self.zipTextField.text) {
-            if let weatherDescription = CacheAccess.weatherDescriptionFromCache(self.zipTextField.text) {
+        if let tempResult = CacheAccess.tempFromCache(self.zipTextField.text!) {
+            if let weatherDescription = CacheAccess.weatherDescriptionFromCache(self.zipTextField.text!) {
                 self.updateUIWithLatestTemp(tempResult, weatherDescription: weatherDescription)
             }
         } else {
@@ -83,8 +83,8 @@ class ViewController: UIViewController {
         
     }
     
-    func updateUIWithLatestTemp(tempResult : Double?, weatherDescription : String) {
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+    func updateUIWithLatestTemp(_ tempResult : Double?, weatherDescription : String) {
+        DispatchQueue.main.async(execute: { () -> Void in
             if let tempResultExists = tempResult {
                 if let updatedTempResult = TemperatureConverter.correctTempForCurrentMeasurementUnit(tempResultExists, measurementUnit: self.currentMeasurementUnit) {
                     let tempUnitSymbol = ViewControllerUtility.symbolForMeasurementUnit(self.currentMeasurementUnit)
@@ -101,8 +101,8 @@ class ViewController: UIViewController {
         })
     }
     
-    func updateBackgroundColorForTemp(tempInKelvin : Double) {
-        UIView.animateWithDuration(2, animations: { ()  -> Void in
+    func updateBackgroundColorForTemp(_ tempInKelvin : Double) {
+        UIView.animate(withDuration: 2, animations: { ()  -> Void in
             
             switch tempInKelvin {
             case 0...288:
@@ -121,10 +121,10 @@ class ViewController: UIViewController {
     
     //MARK: Actions
     
-    @IBAction func FindWeatherTap(sender: UIButton) {
+    @IBAction func FindWeatherTap(_ sender: UIButton) {
         
-        if ViewControllerUtility.checkIfIsZip(self.zipTextField.text) {
-            if CacheAccess.zipIsCached(self.zipTextField.text) {
+        if ViewControllerUtility.checkIfIsZip(self.zipTextField.text!) {
+            if CacheAccess.zipIsCached(self.zipTextField.text!) {
                 self.handleZipIsAlreadyCached()
             } else {
                 self.updateWeatherFromNetwork()
@@ -150,7 +150,7 @@ class ViewController: UIViewController {
         
     }
     
-    @IBAction func tapChangeMeasurementUnit(sender: UIButton) {
+    @IBAction func tapChangeMeasurementUnit(_ sender: UIButton) {
         
         //cycle to next measurement unit [C, F, K] enum
         let nextMeasurementUnit = (self.currentMeasurementUnit.rawValue + 1) % 3

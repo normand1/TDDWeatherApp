@@ -12,9 +12,9 @@ import Foundation
 
 class CacheAccess {
     
-    class func cacheJsonDict(zip: String, dictionary : NSDictionary)->Bool {
-        NSUserDefaults.standardUserDefaults().setObject(dictionary, forKey: zip)
-        let result = NSUserDefaults.standardUserDefaults().objectForKey(zip) as? NSDictionary
+    class func cacheJsonDict(_ zip: String, dictionary : NSDictionary)->Bool {
+        UserDefaults.standard.set(dictionary, forKey: zip)
+        let result = UserDefaults.standard.object(forKey: zip) as? NSDictionary
         if result != nil {
             return true
         } else {
@@ -22,8 +22,8 @@ class CacheAccess {
         }
     }
 
-    class func tempFromCache(zip : String)->Double? {
-        if let resultDictionary = NSUserDefaults.standardUserDefaults().objectForKey(zip) as? NSDictionary {
+    class func tempFromCache(_ zip : String)->Double? {
+        if let resultDictionary = UserDefaults.standard.object(forKey: zip) as? NSDictionary {
             if let temp = OpenWeatherAPIHandler.temperatureFromDictionary(resultDictionary) {
                 return temp
             }
@@ -31,8 +31,8 @@ class CacheAccess {
         return nil
     }
     
-    class func weatherDescriptionFromCache(zip: String)->String? {
-        if let resultDictionary = NSUserDefaults.standardUserDefaults().objectForKey(zip) as? NSDictionary {
+    class func weatherDescriptionFromCache(_ zip: String)->String? {
+        if let resultDictionary = UserDefaults.standard.object(forKey: zip) as? NSDictionary {
             if let temp = OpenWeatherAPIHandler.weatherDescriptionFromDictionary(resultDictionary) {
                 return temp
             }
@@ -40,7 +40,7 @@ class CacheAccess {
         return nil
     }
     
-    class func zipIsCached(zip : String)->Bool {
+    class func zipIsCached(_ zip : String)->Bool {
         let temp = CacheAccess.tempFromCache(zip)
         if temp != nil {
             return true

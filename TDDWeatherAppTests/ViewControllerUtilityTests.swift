@@ -30,15 +30,15 @@ class ViewControllerUtilityTests: XCTestCase {
     //MARK: symbolForMeasurementUnit(measurementUnit : MeasurementUnit)->String?
     
     func testCelsiusMeasurementUnitReturnsCelsiusSymbol() {
-        expect(ViewControllerUtility.symbolForMeasurementUnit(MeasurementUnit.Celsius)) == "℃"
+        expect(ViewControllerUtility.symbolForMeasurementUnit(MeasurementUnit.celsius)) == "℃"
     }
     
     func testFahrenheitMeasurementUnitReturnsFahrenheitSymbol() {
-        expect(ViewControllerUtility.symbolForMeasurementUnit(MeasurementUnit.Fahrenheit)) == "℉"
+        expect(ViewControllerUtility.symbolForMeasurementUnit(MeasurementUnit.fahrenheit)) == "℉"
     }
     
     func testKelvinMeasurementUnitReturnsKelvinSymbol() {
-        expect(ViewControllerUtility.symbolForMeasurementUnit(MeasurementUnit.Kelvin)) == "K"
+        expect(ViewControllerUtility.symbolForMeasurementUnit(MeasurementUnit.kelvin)) == "K"
     }
     
     //MARK: weatherDescription(apiWeatherDescription: String)->String

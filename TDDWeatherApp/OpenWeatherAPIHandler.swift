@@ -11,30 +11,41 @@ import Foundation
 
 class OpenWeatherAPIHandler {
     
-    class func fetchWeatherForZip(zip : String!, callback : (tempResult : Double?, weatherDescription: String) -> Void) {
+    class func fetchWeatherForZip(_ zip : String!, callback : @escaping (_ tempResult : Double?, _ weatherDescription: String) -> Void) {
         
-        var controller = RequestController()
+        let controller = RequestController()
+        
         controller.sendRequest(zip, callback: { (success, statusCode, errorDescription, data) -> Void in
-            var error: NSError?
-            let jsonObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers, error: &error)
 
-            if let topDictionary = jsonObject as? NSDictionary {
-                //cache the top Dictionary for later use!
-                CacheAccess.cacheJsonDict(zip, dictionary: topDictionary)
-                if let temp = self.temperatureFromDictionary(topDictionary) {
-                    if let weatherDescription = self.weatherDescriptionFromDictionary(topDictionary) {
-                        callback(tempResult: temp, weatherDescription: weatherDescription)
-                    }
-                } else {
-                    if topDictionary["message"] != nil {
-                        callback(tempResult: nil, weatherDescription: topDictionary["message"] as! String)
+            do {
+                
+                guard let data = data else { return }
+            
+            let jsonObj = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.init(rawValue: 0))
+                
+                if let topDictionary = jsonObj as? NSDictionary {
+                    //cache the top Dictionary for later use!
+                    CacheAccess.cacheJsonDict(zip, dictionary: topDictionary)
+                    if let temp = self.temperatureFromDictionary(topDictionary) {
+                        if let weatherDescription = self.weatherDescriptionFromDictionary(topDictionary) {
+                            callback(temp, weatherDescription)
+                        }
+                    } else {
+                        if topDictionary["message"] != nil {
+                            callback(nil, topDictionary["message"] as! String)
+                        }
                     }
                 }
+        
+            } catch let error {
+                print(error)
             }
+
+            
         })
     }
     
-    class func temperatureFromDictionary(dictionary : NSDictionary)->Double? {
+    class func temperatureFromDictionary(_ dictionary : NSDictionary)->Double? {
         if let mainDict : NSDictionary = dictionary["main"] as? NSDictionary {
             let currentTemp = mainDict["temp"] as! Double
             print("current temp: \(currentTemp)")
@@ -44,7 +55,7 @@ class OpenWeatherAPIHandler {
         return nil
     }
     
-    class func weatherDescriptionFromDictionary(dictionary : NSDictionary)->String? {
+    class func weatherDescriptionFromDictionary(_ dictionary : NSDictionary)->String? {
         if let weatherArray : NSArray = dictionary["weather"] as? NSArray {
             if let weatherDict = weatherArray[0] as? NSDictionary {
                 if let main: String = weatherDict["icon"] as? String {

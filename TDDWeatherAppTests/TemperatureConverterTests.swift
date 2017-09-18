@@ -38,14 +38,14 @@ class TemperatureConverterTests: XCTestCase {
     }
     
     func testKelvinTempReturned() {
-        expect(TemperatureConverter.correctTempForCurrentMeasurementUnit(10.0, measurementUnit: MeasurementUnit.Kelvin)).to(beCloseTo(10.0, within: 0.1))
+        expect(TemperatureConverter.correctTempForCurrentMeasurementUnit(10.0, measurementUnit: MeasurementUnit.kelvin)).to(beCloseTo(10.0, within: 0.1))
     }
     
     func testCelsiusTempReturned() {
-        expect(TemperatureConverter.correctTempForCurrentMeasurementUnit(10.0, measurementUnit: MeasurementUnit.Celsius)).to(beCloseTo(-263.15, within: 0.1))
+        expect(TemperatureConverter.correctTempForCurrentMeasurementUnit(10.0, measurementUnit: MeasurementUnit.celsius)).to(beCloseTo(-263.15, within: 0.1))
     }
     
     func testFahrenheitTempReturned() {
-        expect(TemperatureConverter.correctTempForCurrentMeasurementUnit(10.0, measurementUnit: MeasurementUnit.Fahrenheit)).to(beCloseTo(-441.6, within: 0.1))
+        expect(TemperatureConverter.correctTempForCurrentMeasurementUnit(10.0, measurementUnit: MeasurementUnit.fahrenheit)).to(beCloseTo(-441.6, within: 0.1))
     }
 }

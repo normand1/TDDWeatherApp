@@ -15,20 +15,17 @@ class CacheAccessTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        let bundle = NSBundle.mainBundle()
-        let path = bundle.pathForResource("openWeatherApp94538Result", ofType: "txt")
-        let text = String(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: nil)!
-        println(text)
+        let bundle = Bundle.main
+        let path = bundle.path(forResource: "openWeatherApp94538Result", ofType: "txt")
+        let text = try! String.init(contentsOfFile: path!, encoding: .utf8)
+        print(text)
         
-        var data: NSData = text.dataUsingEncoding(NSUTF8StringEncoding)!
-        var error: NSError?
-        let jsonObject: AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &error)
-        println(error)
+        let data = text.data(using: String.Encoding.utf8)!
+        let jsonObject = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
         
         if let tempDict = jsonObject as? NSDictionary {
             self.topDict = tempDict
-            println(self.topDict)
-            
+            print(self.topDict)
         }
     }
     
@@ -52,7 +49,7 @@ class CacheAccessTests: XCTestCase {
     }
 
     func testRetreiveNilFromCache() {
-        NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "00000")
+        UserDefaults.standard.set(nil, forKey: "00000")
         let temp = CacheAccess.tempFromCache("00000")
         expect(temp).to(beNil())
     }
